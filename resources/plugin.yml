@@ -1,15 +1,15 @@
-name: com.minecarts.worldoverseer.WorldOverseer
-main: com.minecarts.worldoverseer.com.minecarts.worldoverseer.WorldOverseer
+name: WorldOverseer
+main: com.minecarts.worldoverseer.WorldOverseer
 version: ${pom.version}
 website: http://minecarts.com
 author: Verrier
 depend: [DBQuery]
-description: A plugin to manage certain world attributes
+description: A plugin to disable certain world attributes such as time and weather
 commands:
     overseer:
         description: Access to the bouncer functions
         usage: /<command>
 permissions:
     worldoverseer.admin:
-        description: "Administrative command access to com.minecarts.worldoverseer.WorldOverseer"
+        description: "Administrative command access to WorldOverseer"
         default: op
