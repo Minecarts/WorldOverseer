@@ -13,3 +13,6 @@ permissions:
     worldoverseer.admin:
         description: "Administrative command access to WorldOverseer"
         default: op
+    worldoverseer.block.bypass:
+        description: "Allows users to bypass world restrictions on block break or place"
+        default: op

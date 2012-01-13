@@ -3,7 +3,7 @@
     <groupId>com.minecarts</groupId>
     <version>1.0.0</version>
     <artifactId>WorldOverseer</artifactId>
-    <name>Bouncer</name>
+    <name>WorldOverseer</name>
     <url>http://www.minecarts.com</url>
     <repositories>
         <repository>
