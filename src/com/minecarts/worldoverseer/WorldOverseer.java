@@ -11,6 +11,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
@@ -34,14 +35,7 @@ public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
         pm.registerEvent(Event.Type.BLOCK_PLACE,blockListener,Event.Priority.Low,this);
 
         //Handle any existing worlds
-        for (World world : Bukkit.getWorlds()) {
-            handleWorldFlags(world);
-            try {
-                Thread.sleep(500); //Throttle the queries a bit, TODO, change this to be async so it doesn't add to startup time?
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        loadAllWorldFlags();
 
 
         //Start the time controlling thread
@@ -93,28 +87,32 @@ public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
         }
     }
 
-    public void handleWorldFlags(final World world){
-        new Query("SELECT `worlds`.* FROM `worlds` WHERE `name` = ? LIMIT 1") {
+    public void loadAllWorldFlags(){
+        new Query("SELECT * FROM `worlds`") {
             @Override
-            public void onFetchOne(HashMap row) {
-                if(row == null){
-                    log("Could not find a world with name: " + world.getName());
-                    return;
-                }
-                //Skip any null world flags
-                if(row.get("disable") == null || ((String)row.get("disable")).equalsIgnoreCase("")){
-                    return;
-                }
+            public void onFetch(ArrayList<HashMap> rows) {
+                if(rows == null || rows.size() == 0) return;
+                for(HashMap row : rows){
+                    if(row.get("disable") == null || ((String)row.get("disable")).equalsIgnoreCase("")){
+                        continue;
+                    }
 
-                if(!worlds.containsKey(world)){
-                    worlds.put(world,new WorldLaborer(world));
+                    World world = Bukkit.getWorld((String)row.get("name"));
+                    if(world == null){
+                        log("No world " + row.get("name") + " found.");
+                        continue; //No world with this name exists
+                    }
+
+                    if(!worlds.containsKey(world)){
+                        worlds.put(world,new WorldLaborer(world));
+                    }
+                    for(String flag : ((String)row.get("disable")).split(",")){
+                        worlds.get(world).setFlag(WorldFlag.valueOf(flag));
+                    }
+                    log("Flags set for world " + world);
                 }
-                for(String flag : ((String)row.get("disable")).split(",")){
-                    worlds.get(world).setFlag(WorldFlag.valueOf(flag));
-                }
-                log("Flags set for world " + world);
             }
-        }.fetchOne(world.getName());
+        }.fetch();
     }
 
 

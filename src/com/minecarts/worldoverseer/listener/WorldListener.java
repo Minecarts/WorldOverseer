@@ -11,10 +11,11 @@ public class WorldListener extends org.bukkit.event.world.WorldListener{
         this.plugin = plugin;
     }
 
+    //TODO: If a world is loaded after the server loads (eg it's created by multiverse) -- attempt to load any flags??
+
     @Override
     public void onWorldLoad(WorldLoadEvent event){
         plugin.log("world " + event.getWorld().getName() + " loaded");
-        plugin.handleWorldFlags(event.getWorld());
     }
 
     @Override
