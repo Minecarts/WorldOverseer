@@ -21,8 +21,13 @@ public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
 
         dbq = (DBQuery) getServer().getPluginManager().getPlugin("DBQuery");
         pm.registerEvents(new FlagListener(this),this);
+        
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this,new Runnable(){
+            public void run() {
+                loadAllWorldFlags();
+            }
+        },5,20*60*5);
 
-        loadAllWorldFlags(); //Handle any existing worlds
 
         //Start the time controlling thread
         Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
