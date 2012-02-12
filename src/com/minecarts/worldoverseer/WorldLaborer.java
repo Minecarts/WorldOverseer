@@ -4,6 +4,7 @@ package com.minecarts.worldoverseer;
 import org.bukkit.World;
 import java.util.HashMap;
 
+//Simply a wrapper for a world that allows you to check or set multiple flags for a world.
 public class WorldLaborer {
     private HashMap<WorldFlag, Boolean> flags = new HashMap<WorldFlag, Boolean>();
     private World world;

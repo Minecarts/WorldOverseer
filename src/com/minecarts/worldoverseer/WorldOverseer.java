@@ -1,18 +1,15 @@
 package com.minecarts.worldoverseer;
 
 import com.minecarts.dbquery.DBQuery;
-import com.minecarts.worldoverseer.listener.BlockListener;
-import com.minecarts.worldoverseer.listener.WeatherListener;
-import com.minecarts.worldoverseer.listener.WorldListener;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-import org.bukkit.event.Event;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
     private DBQuery dbq;
@@ -23,20 +20,9 @@ public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
         PluginDescriptionFile pdf = getDescription();
 
         dbq = (DBQuery) getServer().getPluginManager().getPlugin("DBQuery");
+        pm.registerEvents(new FlagListener(this),this);
 
-        WorldListener worldListener = new WorldListener(this);
-        WeatherListener weatherListener = new WeatherListener(this);
-        BlockListener blockListener = new BlockListener(this);
-
-        pm.registerEvent(Event.Type.WORLD_LOAD,worldListener,Event.Priority.Monitor,this);
-        pm.registerEvent(Event.Type.WORLD_UNLOAD,worldListener,Event.Priority.Monitor,this);
-        pm.registerEvent(Event.Type.WEATHER_CHANGE,weatherListener,Event.Priority.High,this); //Have to listen on high because multiverse doesn't check for canceled events
-        pm.registerEvent(Event.Type.BLOCK_BREAK,blockListener,Event.Priority.Low,this);
-        pm.registerEvent(Event.Type.BLOCK_PLACE,blockListener,Event.Priority.Low,this);
-
-        //Handle any existing worlds
-        loadAllWorldFlags();
-
+        loadAllWorldFlags(); //Handle any existing worlds
 
         //Start the time controlling thread
         Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
@@ -54,6 +40,7 @@ public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
         }, 20 * 5, 20 * 5);
 
         log(pdf.getVersion() + " enabled.");
+
     }
 
     public void onDisable(){
@@ -64,8 +51,8 @@ public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
         return worlds.get(world);
     }
 
-    public static void log(String msg){
-        System.out.println("WorldOverseer> " + msg);
+    public void log(String msg){
+        getLogger().log(Level.INFO,msg);
     }
 
     class Query extends com.minecarts.dbquery.Query {
