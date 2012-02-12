@@ -64,7 +64,6 @@ public class FlagListener implements Listener {
 //Weather
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onWeatherChange(WeatherChangeEvent event){
-        if(event.isCancelled()) return;
         WorldLaborer laborer = plugin.getLaborer(event.getWorld());
         if(laborer == null) return;
         if(event.toWeatherState()){
