@@ -16,6 +16,9 @@ public class WorldLaborer {
     public void setFlag(WorldFlag flag){
         flags.put(flag, true);
     }
+    public void unsetAllFlags(){
+        flags.clear();
+    }
     public void unsetFlag(WorldFlag flag){
         flags.put(flag, false);
     }

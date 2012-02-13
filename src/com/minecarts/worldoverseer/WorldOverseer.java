@@ -98,11 +98,13 @@ public class WorldOverseer extends org.bukkit.plugin.java.JavaPlugin {
                     if(!worlds.containsKey(world)){
                         worlds.put(world,new WorldLaborer(world));
                     }
+                    worlds.get(world).unsetAllFlags();
                     for(String flag : ((String)row.get("disable")).split(",")){
                         worlds.get(world).setFlag(WorldFlag.valueOf(flag));
                     }
-                    log("Flags set for world " + world);
+                    //log("Flags set for world " + world);
                 }
+                log("Flags refreshed for " + rows.size() + " worlds.");
             }
         }.fetch();
     }
