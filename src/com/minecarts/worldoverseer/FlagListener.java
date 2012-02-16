@@ -47,7 +47,7 @@ public class FlagListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event){
         WorldLaborer laborer = plugin.getLaborer(event.getBlock().getWorld());
         if(laborer == null) return;
-        if(laborer.isFlagSet(WorldFlag.BLOCK_PLACE) && !event.getPlayer().hasPermission("overseer.block.bypass")){
+        if(laborer.isFlagSet(WorldFlag.BLOCK_PLACE) && !event.getPlayer().hasPermission("worldoverseer.block.bypass")){
             event.setCancelled(true);
         }
     }
@@ -56,7 +56,7 @@ public class FlagListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event){
         WorldLaborer laborer = plugin.getLaborer(event.getBlock().getWorld());
         if(laborer == null) return;
-        if(laborer.isFlagSet(WorldFlag.BLOCK_BREAK) && !event.getPlayer().hasPermission("overseer.block.bypass")){
+        if(laborer.isFlagSet(WorldFlag.BLOCK_BREAK) && !event.getPlayer().hasPermission("worldoverseer.block.bypass")){
             event.setCancelled(true);
         }
     }
